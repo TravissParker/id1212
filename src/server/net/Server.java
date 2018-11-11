@@ -2,7 +2,6 @@ package server.net;
 
 import server.model.DTO;
 import server.model.Game;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -32,7 +31,8 @@ public class Server {
             }
         }
         catch (IOException e) {
-            System.out.println("Server error in server");
+            System.out.println("Server error");
+            e.printStackTrace();
         }
     }
 

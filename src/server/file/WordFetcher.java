@@ -9,6 +9,7 @@ import java.io.*;
  * Gets and delivers word to the game.
  * */
 public class WordFetcher {
+    //Fixme: set relative path to project root
     private final String path = "C:\\Users\\mikae\\OneDrive\\IdeaProjects\\HW1\\words.txt";
     private List<String> library = new ArrayList<>();
 

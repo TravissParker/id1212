@@ -15,9 +15,7 @@ public class Interpreter implements Runnable {
     private Controller ctrl;
     private SynchronizedStdOut printer = new SynchronizedStdOut();
     private boolean running = false;
-    //Fixme: these should be found in input
-    private final String host = "localhost";
-    private final int port = 8080;
+    private final String WELCOME_MESSAGE = "Welcome to the Hangman Game!\nAt any time you can type HELP to see a list of instructions, if you feel you need it.";
     private final String  commands = "" +
             "    CONNECT: connects you to the server.\n" +
             "    DISCONNECT: disconnects you from the server.\n" +
@@ -26,6 +24,9 @@ public class Interpreter implements Runnable {
             "    GUESS [letter|word]: make a guess, letter or whole word.\n" +
             "    RULES: shows the rules of the game.\n" +
             "    SCORE: shows your score.\n";
+    //Fixme: these should be parsed from user input, hardcoded hear during development
+    private final String host = "localhost";
+    private final int port = 8080;
 
     /**
     * Starts up a new interpreter thread.
@@ -34,6 +35,7 @@ public class Interpreter implements Runnable {
         // Guards that nothing will happen if start is called on running interpreter.
         if (running)    return;
 
+        System.out.println(WELCOME_MESSAGE);
         ctrl = new Controller();
         running = true;
         new Thread(this).start();
@@ -55,7 +57,6 @@ public class Interpreter implements Runnable {
                         ctrl.connect(host, port, new Broadcaster());
                         break;
                     case DISCONNECT:
-                        //Fixme: disconnect post, the server loops exceptions, other threads can work still.
                         ctrl.disconnect();
                         break;
                     case USER:
@@ -65,7 +66,6 @@ public class Interpreter implements Runnable {
                         ctrl.guess(parseLiteral(input));
                         break;
                     case START:
-                        //Fixme: I don't think this is threaded proper.
                         ctrl.startGame();
                         break;
                     case RULES:
@@ -76,15 +76,16 @@ public class Interpreter implements Runnable {
                         break;
                     case HELP:
                         System.out.println(commands);
+                        break;
                     default:
                         throw new IllegalArgumentException();
                 }
             }
             catch (IllegalArgumentException e) {
-                printer.println("That is not a known command, type RULES to see a list of instructions.");
+                printer.println("That is not a known command, type HELP to see a list of instructions.");
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                printer.println("Arguments where missing, type RULES to see a list of instructions.");
+                printer.println("Arguments where missing, type HELP to see a list of instructions.");
             }
             catch (IOException e) {
                 e.printStackTrace();

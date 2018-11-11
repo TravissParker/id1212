@@ -19,7 +19,6 @@ public class Controller {
     }
 
     public void disconnect() throws IOException {
-        //Question: no comp future?
         serverConnection.disconnect();
     }
 

@@ -67,8 +67,6 @@ public class ServerConnection {
         public void run() {
             try {
                 while (connected) {
-                    //Fixme: thisb is the endles loop of trans null, we need to mark as not connected
-                    //Question: readline blocks?
                     String stream = fromServer.readLine();
 
                     String[] parts = stream.split(LENGTH_DELIMITER);
@@ -126,7 +124,6 @@ public class ServerConnection {
                 returnValue = splitData[1] + " started a new game!" + NEW_LINE;
                 break;
             case DISCONNECT:
-                //Todo
                 returnValue = splitData[1] + " left the game :("+ NEW_LINE;
                 break;
             case SCORE:

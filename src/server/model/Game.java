@@ -13,12 +13,13 @@ public class Game {
     private int attemptsLeft;
     private int noLetters;
     private WordFetcher wf = new WordFetcher();
+    private final String UNKNOWN_LETTER = "_";
     private final String rules =
             "Guess a letter in the places of the word where it says _, " +
                     "if the guess is correct then _ will be replaced by the " +
                     "correct guess." +
                     "\nYou may also guess the entire word. Each incorrect guess (letter or word)" +
-                    " will count as an attempt. \nGueesing the same letter twice is " +
+                    " will count as an attempt. \nGuessing the same letter twice is " +
                     "free, but guessing the same word twice is not free. " +
                     "\nCollectively the players have the same number of attempts as there are " +
                     "letters in the word. ";
@@ -27,6 +28,7 @@ public class Game {
     public DTO start() {
         String word = wf.supplyWord().toUpperCase();
 
+        //Prints the chosen word to the server side
         System.out.println("Word: " + word);
 
         letters = word.toCharArray();
@@ -94,7 +96,7 @@ public class Game {
             if (guessed[i])
                 r = r + String.valueOf(letters[i]) + " ";
             else
-                r = r + "_" + " ";
+                r = r + UNKNOWN_LETTER + " ";
         }
 
         return r.trim();

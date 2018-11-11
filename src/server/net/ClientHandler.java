@@ -2,13 +2,11 @@ package server.net;
 
 import common.Command;
 import server.model.DTO;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
 import static common.Constants.*;
 
 public class ClientHandler implements Runnable {
@@ -16,7 +14,7 @@ public class ClientHandler implements Runnable {
     private Socket clientSocket;
     private BufferedReader fromClient;
     private PrintWriter toClient;
-    private String player = "Anonymous"; // Fix player_int
+    private String player = "Anonymous";
     private boolean connected;
     private int stat = 0;
 
@@ -38,7 +36,6 @@ public class ClientHandler implements Runnable {
 
         while (connected) {
             try {
-                //Fixme: I think we get fail loop here because we are waiting for a read but then socket is closed?
                 String stream = fromClient.readLine();
 
                 String[] parts = stream.split(LENGTH_DELIMITER);
@@ -84,7 +81,7 @@ public class ClientHandler implements Runnable {
                         server.broadcast(Command.GUESS.toString() +
                                 DATA_DELIMITER + player +
                                 DATA_DELIMITER +
-                                dto.getGuessedLetters().substring(dto.getGuessedLetters().length() - 1));
+                                dto.getGuessedLetters());
                         server.broadcast(getStateOutput());
                         break;
                     case USER:
@@ -102,8 +99,7 @@ public class ClientHandler implements Runnable {
                         transmit(Command.RULES.toString() + DATA_DELIMITER + server.getRules());
                         break;
                     default:
-                        //Fixme: proper exception? Is that even a req?
-                        System.out.println("default in clienthandler");
+                        System.out.println("The input was not known to the ClientHandler");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -112,7 +108,6 @@ public class ClientHandler implements Runnable {
     }
 
 
-    //Fixme: these functions are the same as in interpreter, can we extract anything?
     private String parseCommand(String input) {
         return input.split(" ")[0];
     }
